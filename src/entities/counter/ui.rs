@@ -1,19 +1,20 @@
-use yew::prelude::*;
-use yewdux::prelude::*;
-
-use crate::entities::counter::store::{CounterActions, CounterState};
+use super::{
+    actions::{counter_decrement, counter_increment, counter_reset},
+    selectors::select_count,
+};
+use yew::{function_component, html, Html};
+use yewdux::functional::use_selector;
 
 #[function_component]
 pub fn Counter() -> Html {
-    let (counter, dispatch) = use_store::<CounterState>();
-    let increment = dispatch.apply_callback(|_| CounterActions::Increment);
-    let decrement = dispatch.apply_callback(|_| CounterActions::Decrement);
+    let count = use_selector(select_count);
 
     html! {
         <>
-          <p>{ counter.count }</p>
-          <button onclick={increment}>{"+1"}</button>
-          <button onclick={decrement}>{"-1"}</button>
+          <p>{ *count }</p>
+          <button onclick={counter_increment}>{"+1"}</button>
+          <button onclick={counter_decrement}>{"-1"}</button>
+          <button onclick={counter_reset}>{"reset count"}</button>
         </>
     }
 }
